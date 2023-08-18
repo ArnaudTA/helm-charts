@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: k3s-backup
+spec:
+  schedule: {{ .Values.schedule | default "0 0 * * *" }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup
+            image: minio/mc
+            command: ["/bin/sh", "/scripts/backup.sh"]
+            envFrom:
+            - secretRef:
+                name: s3-creds
+            volumeMounts:
+            - name: k3s-data
+              mountPath: /k3s
+            - name: backup-script
+              mountPath: /scripts
+              readOnly: true
+          restartPolicy: OnFailure
+          volumes:
+          - name: k3s-data
+            hostPath:
+              path: /var/lib/rancher/k3s/server
+              type: Directory
+          - name: backup-script
+            configMap:
+              name: k3s-backup-script
+              defaultMode: 0755  # pour que le script soit exécutable

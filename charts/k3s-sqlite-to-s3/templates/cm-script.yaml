@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k3s-backup-script
+data:
+  backup.sh: |
+    #!/bin/sh
+    set -e
+    
+    [ -z $CLUSTER_NAME ] && echo 'ERROR: no $CLUSTER_NAME provided' && exit 1
+    DATE=$(date +'%Y-%m-%dT%H-%M')
+    TARGET_PATH="$S3_BUCKET/$CLUSTER_NAME/$DATE/k3s"
+
+    echo "[+] Setting S3 alias"
+    mc alias set myminio "$S3_URL" "$S3_ACCESS_KEY" "$S3_SECRET_KEY"
+
+    echo "[+] Uploading token"
+    mc cp /k3s/token myminio/$TARGET_PATH/token
+
+    echo "[+] Uploading db directory"
+    mc cp --recursive /k3s/db myminio/$TARGET_PATH/
+
+    echo "[✓] Backup complete"
