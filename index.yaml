@@ -3,6 +3,16 @@ entries:
   backup-k3s:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-04-04T19:12:54.236166545Z"
+    description: A Helm chart for to backup your k3s sqlite DB to a S3
+    digest: 2430c9f9d35cc56c2821f9e93b6deb59b4ea2b9245162c5dd28e21008064e210
+    name: backup-k3s
+    type: application
+    urls:
+    - https://github.com/ArnaudTA/helm-charts/releases/download/backup-k3s-0.0.3/backup-k3s-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-04-04T19:07:57.950825055Z"
     description: A Helm chart for to backup your k3s sqlite DB to a S3
     digest: 9b77989c383d14b11b2f7515f90ade2ca42347ee59c5531be358a2b804df28d4
@@ -21,4 +31,4 @@ entries:
     urls:
     - https://github.com/ArnaudTA/helm-charts/releases/download/backup-k3s-0.0.1/backup-k3s-0.0.1.tgz
     version: 0.0.1
-generated: "2025-04-04T19:07:57.950831457Z"
+generated: "2025-04-04T19:12:54.236183125Z"
