@@ -14,6 +14,7 @@ data:
     echo "[+] Setting S3 alias"
     mc alias set myminio "$S3_URL" "$S3_ACCESS_KEY" "$S3_SECRET_KEY"
 
+    echo "destination folder: myminio/$TARGET_PATH"
     echo "[+] Uploading token"
     mc cp /k3s/token myminio/$TARGET_PATH/token
 
