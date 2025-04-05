@@ -1,15 +1,15 @@
-# -- clusterName, used to create s3 folder
+# -- (string) used to create s3 folder
 clusterName: ""
 
 s3:
-  # -- s3.url, url of ypur s3 server
-  url: https://s3.minio.nonot.eu
-  # -- s3.bucket, name of s3 bucket
-  bucket: ""
-  # -- s3.accessKey, accessKey credentials
-  accessKey: ""
-  # -- s3.secretKey, secretKey credentials
-  secretKey: ""
+  # -- (string) url of ypur s3 server
+  url: 
+  # -- (string) name of s3 bucket
+  bucket: 
+  # -- (string) accessKey credentials
+  accessKey: 
+  # -- (string) secretKey credentials
+  secretKey: 
 
-# -- schedule, cron-based formula, default: "0 0 * * *" (Midnight)
-schedule: ""
+# -- cron-based formula
+schedule: 0 0 * * *
