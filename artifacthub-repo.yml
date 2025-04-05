@@ -1,0 +1,6 @@
+# artifacthub-repo.yml
+repositoryID: c98046e3-0255-4e73-9f20-4d49b1e01b55
+name: ArnaudTA Charts
+description: Charts Helm en vrac
+type: helm
+url: https://arnaudta.github.io/helm-charts/
