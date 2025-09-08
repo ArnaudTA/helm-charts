@@ -5,20 +5,31 @@ metadata:
 data:
   backup.sh: |
     #!/bin/sh
-    set -e
-    
+    set -euo pipefail
+
     [ -z $CLUSTER_NAME ] && echo 'ERROR: no $CLUSTER_NAME provided' && exit 1
     DATE=$(date +'%Y-%m-%dT%H-%M')
     TARGET_PATH="$S3_BUCKET/$CLUSTER_NAME/$DATE/k3s"
 
     echo "[+] Setting S3 alias"
-    mc alias set myminio "$S3_URL" "$S3_ACCESS_KEY" "$S3_SECRET_KEY"
+    mcli alias set myminio "$S3_URL" "$S3_ACCESS_KEY" "$S3_SECRET_KEY"
 
     echo "destination folder: myminio/$TARGET_PATH"
     echo "[+] Uploading token"
-    mc cp /k3s/token myminio/$TARGET_PATH/token
+    mcli cp /k3s/token myminio/$TARGET_PATH/token
 
-    echo "[+] Uploading db directory"
-    mc cp --recursive /k3s/db myminio/$TARGET_PATH/
+    echo "[+] Backup database..."
+    DB_PATH=/k3s/db/state.db
+    TMP_DB="/tmp/bkp/db.sqlite"
+    [ -f $TMP_DB ] && rm $TMP_DB
+
+    echo "[+] Creating online backup of $DB_PATH → $TMP_DB"
+    sqlite3 "file:$DB_PATH?mode=ro" "VACUUM INTO '$TMP_DB';"
+
+    echo "[+] Compressing to "$TMP_DB".gz"
+    gzip -c "$TMP_DB" > "$TMP_DB".gz
+
+    echo "[+] Uploading to myminio/$TARGET_PATH/"
+    mcli cp "$TMP_DB".gz myminio/$TARGET_PATH/
 
     echo "[✓] Backup complete"

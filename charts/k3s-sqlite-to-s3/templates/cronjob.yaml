@@ -10,12 +10,14 @@ spec:
         spec:
           containers:
           - name: backup
-            image: minio/mc
+            image: ghcr.io/cableship/k3s-backup
             command: ["/bin/sh", "/scripts/backup.sh"]
             envFrom:
             - secretRef:
                 name: s3-creds
             volumeMounts:
+            - mountPath: /tmp/bkp
+              name: tmp
             - name: k3s-data
               mountPath: /k3s
             - name: backup-script
@@ -23,6 +25,8 @@ spec:
               readOnly: true
           restartPolicy: OnFailure
           volumes:
+          - emptyDir: {}
+            name: tmp
           - name: k3s-data
             hostPath:
               path: /var/lib/rancher/k3s/server
